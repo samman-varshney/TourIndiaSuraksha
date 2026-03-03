@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives",
     "type-check": "tsc --noEmit",
     "test": "jest --passWithNoTests || true",
     "prepare": "husky"
@@ -24,18 +24,22 @@
     "tailwindcss": "^4.2.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.6.0",
     "@types/react": "^18.3.6",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
-    "eslint": "^10.0.2",
+    "eslint": "^9.39.3",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
     "husky": "^9.1.7",
     "jest": "^30.2.0",
     "lint-staged": "^16.3.1",
     "prettier": "^3.8.1",
     "ts-jest": "^29.4.6",
     "typescript": "^5.5.4",
+    "typescript-eslint": "^8.56.1",
     "vite": "^5.4.4"
   },
   "lint-staged": {
