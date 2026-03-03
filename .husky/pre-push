@@ -1,0 +1,6 @@
+# .husky/pre-push
+echo "Running pre-push checks..."
+
+npm run lint        # full lint (not just staged)
+npm run test        # unit tests
+npm run build       # ensure it compiles

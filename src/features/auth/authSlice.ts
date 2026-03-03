@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AuthState, AuthUser, LoginPayload, RegisterPayload } from './types';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AuthState, AuthUser, LoginPayload, RegisterPayload } from "./types";
 
 const initialState: AuthState = {
   user: null,
@@ -10,16 +10,23 @@ const initialState: AuthState = {
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     // Trigger the login saga — sets loading
-    loginRequest: (state, _action: PayloadAction<LoginPayload>) => {
+    loginRequest: (
+      state,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      _action: PayloadAction<LoginPayload>,
+    ) => {
       state.loading = true;
       state.error = null;
     },
     // Store user + token after successful authentication
-    loginSuccess: (state, action: PayloadAction<{ user: AuthUser; token: string }>) => {
+    loginSuccess: (
+      state,
+      action: PayloadAction<{ user: AuthUser; token: string }>,
+    ) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isAuthenticated = true;
@@ -32,7 +39,11 @@ const authSlice = createSlice({
       state.loading = false;
     },
     // Trigger registration saga
-    registerRequest: (state, _action: PayloadAction<RegisterPayload>) => {
+    registerRequest: (
+      state,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      _action: PayloadAction<RegisterPayload>,
+    ) => {
       state.loading = true;
       state.error = null;
     },
