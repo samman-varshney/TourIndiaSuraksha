@@ -344,8 +344,8 @@ export default function LoginPage() {
 
           {/* CTA — Secondary: Register */}
           {/* link for register page; */}
-          <span
-            // to="/register"
+          <Link
+            to="/register"
             className="
     flex items-center justify-center
     w-full h-[48px] bg-white border-[1.5px] border-slate-200
@@ -355,7 +355,7 @@ export default function LoginPage() {
   "
           >
             Register Digital ID
-          </span>
+          </Link>
 
           {/* Divider — SSO */}
           <div className="flex items-center gap-3 mb-4">
