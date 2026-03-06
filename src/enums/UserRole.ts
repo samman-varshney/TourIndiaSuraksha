@@ -1,6 +1,7 @@
 /** Defines all possible access roles within the application */
 export enum UserRole {
-  TOURIST    = 'TOURIST',
-  AUTHORITY  = 'AUTHORITY',
-  ADMIN      = 'ADMIN',
+  GUIDE = "GUIDE",
+  TOURIST = "TOURIST",
+  AUTHORITY = "AUTHORITY",
+  ADMIN = "ADMIN",
 }

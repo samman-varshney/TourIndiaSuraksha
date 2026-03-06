@@ -3,64 +3,91 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
   InternalAxiosRequestConfig,
-} from 'axios';
-import { toastService } from './Toastservice';
+} from "axios";
 
-// Base URL sourced from Vite environment variable
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api';
+interface AuthInternalConfig extends InternalAxiosRequestConfig {
+  requireAuth?: boolean;
+}
 
-// Singleton Axios instance shared across all API calls
-export const apiClient: AxiosInstance = axios.create({
-  baseURL: BASE_URL,
-  timeout: 15_000,
-  headers: { 'Content-Type': 'application/json' },
-});
+export interface ApiRequestConfig extends AxiosRequestConfig {
+  requireAuth?: boolean;
+}
 
-// Request interceptor — attaches the stored JWT to every outbound request
-apiClient.interceptors.request.use(
-  (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-    const token = localStorage.getItem('auth_token');
-    if (token && config.headers) {
-      config.headers['Authorization'] = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+export class BaseApiService {
+  private static instance: BaseApiService;
+  private readonly client: AxiosInstance;
 
-// Response interceptor — handles global error cases (401, 500, etc.)
-apiClient.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  (error) => {
-    const status = error?.response?.status;
+  private constructor() {
+    this.client = axios.create({
+      baseURL: import.meta.env.VITE_API_BASE_URL ?? "/api",
+      timeout: 15_000,
+      headers: { "Content-Type": "application/json" },
+    });
 
-    // Redirect to login on token expiry
-    if (status === 401) {
-      localStorage.removeItem('auth_token');
-      window.location.href = '/login';
-    }
+    this.client.interceptors.request.use(
+      (config: AuthInternalConfig): AuthInternalConfig => {
+        const token = localStorage.getItem("auth_token");
+        if (token && config.requireAuth !== false) {
+          config.headers["Authorization"] = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => Promise.reject(error),
+    );
 
-    // Show a user-visible toast for server errors
-    if (status >= 500) {
-      toastService.error('A server error occurred. Please try again later.');
-    }
+    this.client.interceptors.response.use(
+      (response: AxiosResponse) => response,
+      (error) => {
+        const status = error?.response?.status;
+        if (status === 401) {
+          localStorage.removeItem("auth_token");
+          alert("Session expired. Please log in again.");
+          window.location.href = "/login";
+        }
 
-    return Promise.reject(error);
+        return Promise.reject(error);
+      },
+    );
   }
-);
 
-/** Thin wrappers for common HTTP verbs — re-export for convenience */
-export const get = <T>(url: string, config?: AxiosRequestConfig) =>
-  apiClient.get<T>(url, config).then((r) => r.data);
+  public static getInstance(): BaseApiService {
+    if (!BaseApiService.instance) {
+      BaseApiService.instance = new BaseApiService();
+    }
+    return BaseApiService.instance;
+  }
 
-export const post = <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
-  apiClient.post<T>(url, data, config).then((r) => r.data);
+  public async get<T>(url: string, config?: ApiRequestConfig): Promise<T> {
+    return this.client.get<T>(url, config).then((r) => r.data);
+  }
 
-export const put = <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
-  apiClient.put<T>(url, data, config).then((r) => r.data);
+  public async post<T>(
+    url: string,
+    data?: unknown,
+    config?: ApiRequestConfig,
+  ): Promise<T> {
+    return this.client.post<T>(url, data, config).then((r) => r.data);
+  }
 
-export const patch = <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
-  apiClient.patch<T>(url, data, config).then((r) => r.data);
+  public async put<T>(
+    url: string,
+    data?: unknown,
+    config?: ApiRequestConfig,
+  ): Promise<T> {
+    return this.client.put<T>(url, data, config).then((r) => r.data);
+  }
 
-export const del = <T>(url: string, config?: AxiosRequestConfig) =>
-  apiClient.delete<T>(url, config).then((r) => r.data);
+  public async patch<T>(
+    url: string,
+    data?: unknown,
+    config?: ApiRequestConfig,
+  ): Promise<T> {
+    return this.client.patch<T>(url, data, config).then((r) => r.data);
+  }
+
+  public async delete<T>(url: string, config?: ApiRequestConfig): Promise<T> {
+    return this.client.delete<T>(url, config).then((r) => r.data);
+  }
+}
+
+export const baseApiService = BaseApiService.getInstance();

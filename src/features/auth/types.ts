@@ -1,4 +1,4 @@
-import { UserRole } from '../../enums/UserRole';
+import { UserRole } from "../../enums/UserRole";
 
 /** Shape of the authenticated user object stored in state */
 export interface AuthUser {

@@ -1,27 +1,33 @@
+import { guestAuthRoutes } from "./guest/auth";
+
 // All backend API endpoint paths defined in one place
 export const API_ROUTES = {
   AUTH: {
-    LOGIN:    '/auth/login',
-    REGISTER: '/auth/register',
-    LOGOUT:   '/auth/logout',
-    ME:       '/auth/me',
-    REFRESH:  '/auth/refresh',
+    LOGIN: "/auth/login",
+    REGISTER: "/auth/register",
+    LOGOUT: "/auth/logout",
+    ME: "/auth/me",
+    REFRESH: "/auth/refresh",
   },
   TOURIST: {
-    PROFILE:  '/tourist/profile',
-    LIST:     '/tourist',
-    BY_ID:    (id: string) => `/tourist/${id}`,
+    PROFILE: "/tourist/profile",
+    LIST: "/tourist",
+    BY_ID: (id: string) => `/tourist/${id}`,
   },
   ALERTS: {
-    LIST:     '/alerts',
-    BY_ID:    (id: string) => `/alerts/${id}`,
-    RESOLVE:  (id: string) => `/alerts/${id}/resolve`,
+    LIST: "/alerts",
+    BY_ID: (id: string) => `/alerts/${id}`,
+    RESOLVE: (id: string) => `/alerts/${id}/resolve`,
     ESCALATE: (id: string) => `/alerts/${id}/escalate`,
-    PANIC:    '/alerts/panic',
+    PANIC: "/alerts/panic",
   },
   LOCATION: {
-    CURRENT:  '/location/current',
-    HISTORY:  '/location/history',
-    UPDATE:   '/location/update',
+    CURRENT: "/location/current",
+    HISTORY: "/location/history",
+    UPDATE: "/location/update",
   },
 } as const;
+
+export const authRoutes = {
+  guest: guestAuthRoutes,
+};
