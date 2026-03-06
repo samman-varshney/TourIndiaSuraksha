@@ -30,6 +30,7 @@ const authSlice = createSlice({
     setAuthUserId(state, action: PayloadAction<string>) {
       state.userId = action.payload;
     },
+
     resetAuthState() {
       return initialState;
     },
